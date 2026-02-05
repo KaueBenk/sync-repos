@@ -1,6 +1,6 @@
 param(
     # Path to the parent directory containing the repositories
-    [string]$ReposPath = "..",
+    [string]$ReposPath = ".."
 )
 
 $problemRepos = @()
