@@ -5,6 +5,21 @@ param(
 
 $problemRepos = @()
 
+function SendNotification {
+    param (
+        [string]$title,
+        [string]$message,
+        [string]$sound = "Default"
+    )
+
+    if (-not (Get-Module -ListAvailable -Name BurntToast)) {
+        Write-Host "BurntToast module not found. Skipping notification." -ForegroundColor Yellow
+        return
+    }
+    
+    New-BurntToastNotification -Text $title, $message -Sound $sound
+}
+
 Get-ChildItem -Directory $ReposPath | ForEach-Object {
     $repoName = $_.Name
     Write-Host "Processing repository: $repoName" -ForegroundColor Cyan
@@ -31,8 +46,10 @@ Get-ChildItem -Directory $ReposPath | ForEach-Object {
 }
 
 if ($problemRepos.Count -eq 0) {
+    SendNotification -title "Repository Sync Status" -message "All repositories are clean."
     Write-Host "No problems found! All repositories are clean." -ForegroundColor Green
 } else {
+    SendNotification -title "Repository Sync Issues" -message "Found $($problemRepos.Count) repository(ies) with problems."
     Write-Host "============================================" -ForegroundColor Magenta
     Write-Host "PROBLEM REPORT" -ForegroundColor Magenta
     Write-Host "============================================" -ForegroundColor Magenta
