@@ -14,6 +14,7 @@ function SendNotification {
 
     if (-not (Get-Module -ListAvailable -Name BurntToast)) {
         Write-Host "BurntToast module not found. Skipping notification." -ForegroundColor Yellow
+        Write-Host 'Install it using "Install-Module -Name BurntToast"'
         return
     }
     
